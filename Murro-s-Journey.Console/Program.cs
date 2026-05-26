@@ -6,14 +6,6 @@ class Program
 {
     static void Main(string[] args)
     {
-        Game game = new Game();
-        game.Start();
-
-        while (game.IsRunning)
-        {
-            game.Update();
-            game.Draw();
-            System.Threading.Thread.Sleep(100);
-        }
+        GameManager.Instance.Run();
     }
 }
