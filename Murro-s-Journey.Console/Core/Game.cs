@@ -10,11 +10,12 @@ public class Game
 
     public bool IsRunning => isRunning;
 
-    public Game()
+    public Game(int mapWidth, int mapHeight, int playerHealth)
     {
         isRunning = true;
-        currentMap = new Map(20, 10);
-        player = new Player("Murro", 10, 5);
+        currentMap = new Map(mapWidth, mapHeight);
+
+        player = new Player("Murro", mapWidth / 2, mapHeight / 2, playerHealth);
         currentMap.AddEntity(player);
         currentMap.Generate();
     }
@@ -33,6 +34,22 @@ public class Game
             {
                 Stop();
             }
+            else if (key == ConsoleKey.W)
+            {
+                System.Console.WriteLine("Moving up");
+            }
+            else if (key == ConsoleKey.S)
+            {
+                System.Console.WriteLine("Moving down");
+            }
+            else if (key == ConsoleKey.A)
+            {
+                System.Console.WriteLine("Moving left");
+            }
+            else if (key == ConsoleKey.D)
+            {
+                System.Console.WriteLine("Moving right");
+            }
         }
         currentMap.Update();
     }
@@ -44,7 +61,7 @@ public class Game
         System.Console.WriteLine();
         currentMap.Draw();
         System.Console.WriteLine();
-        System.Console.WriteLine("ESC to exit");
+        System.Console.WriteLine("WASD to move | ESC to exit");
     }
 
     public void Stop()

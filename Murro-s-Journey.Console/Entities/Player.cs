@@ -8,8 +8,8 @@ public class Player : Entity
     public int Experience => experience;
     public int Level => level;
 
-    public Player(string name, int startX, int startY) 
-        : base(name, 100, startX, startY)
+    public Player(string name, int startX, int startY, int startHealth) 
+        : base(name, startHealth, startX, startY)
     {
         experience = 0;
         level = 1;
@@ -35,7 +35,7 @@ public class Player : Entity
 
     public override void Update()
     {
-        // TODO: Handle player input
+        // TODO: Handle player input (движение)
     }
 
     public override void Draw()
