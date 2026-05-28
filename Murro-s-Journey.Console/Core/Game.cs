@@ -95,9 +95,11 @@ public class Game
     public void Draw()
     {
         System.Console.Clear();
-        // Display player stats
+        
+        System.Console.WriteLine(hud.GetHealthBar());
         System.Console.WriteLine($"Level: {player.Level} | Exp: {player.Experience}");
         System.Console.WriteLine();
+        
         currentMap.Draw();
         System.Console.WriteLine();
         System.Console.WriteLine("WASD to move | H = Heal | X = Take Damage | ESC to exit");
