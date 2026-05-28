@@ -4,6 +4,7 @@ using Murro_s_Journey.Console.Builders;
 using Murro_s_Journey.Console.Decorators;
 using Murro_s_Journey.Console.Interfaces;
 using Murro_s_Journey.Console.Adapters;
+using Murro_s_Journey.Console.Strategies;
 
 namespace Murro_s_Journey.Console.Core;
 
@@ -204,8 +205,9 @@ public sealed class GameManager
         System.Console.WriteLine("Generated map:");
         PrintMap(originalMap);
         System.Console.WriteLine();
+        
         System.Console.WriteLine("--- Adapted Dungeon Generator ---");
-        DungeonGenerator thirdPartyGenerator = new DungeonGenerator("Dark forest");
+        DungeonGenerator thirdPartyGenerator = new DungeonGenerator("dark forest");
         IMapGenerator adaptedGenerator = new DungeonGeneratorAdapter(thirdPartyGenerator);
         adaptedGenerator.Generate(width, height);
         char[,] adaptedMap = adaptedGenerator.GetMap();
@@ -215,7 +217,7 @@ public sealed class GameManager
         PrintMap(adaptedMap);
         System.Console.WriteLine();
         
-        System.Console.WriteLine("Both generators work with the same interface");
+        System.Console.WriteLine("Both generators work with the same interface!");
         System.Console.WriteLine();
     }
 
@@ -234,6 +236,38 @@ public sealed class GameManager
         }
     }
 
+    private void DemonstrateStrategyPattern()
+    {
+        System.Console.WriteLine("=== Strategy Pattern Demo (Enemy Behaviors) ===");
+        System.Console.WriteLine();
+        
+        var testEnemy = new Wolf(5, 5);
+        var player = new Player("Murro", 10, 5, 100);
+        
+        System.Console.WriteLine($"Enemy: {testEnemy.Name}");
+        System.Console.WriteLine($"Player: {player.Name} at position ({player.PosX}, {player.PosY})");
+        System.Console.WriteLine();
+        
+        System.Console.WriteLine("--- Melee Attack Strategy ---");
+        testEnemy.SetBehavior(new MeleeAttackStrategy(1));
+        testEnemy.ExecuteBehavior(player);
+        System.Console.WriteLine($"Player health: {player.Health}");
+        System.Console.WriteLine();
+        
+        System.Console.WriteLine("--- Changing to Passive Strategy ---");
+        testEnemy.SetBehavior(new PassiveBehaviorStrategy());
+        testEnemy.ExecuteBehavior(player);
+        System.Console.WriteLine($"Player health: {player.Health} (unchanged)");
+        System.Console.WriteLine();
+        
+        System.Console.WriteLine("--- Changing back to Melee Strategy ---");
+        testEnemy.SetBehavior(new MeleeAttackStrategy(1));
+        testEnemy.ExecuteBehavior(player);
+        System.Console.WriteLine($"Player health: {player.Health}");
+        
+        System.Console.WriteLine();
+    }
+
     public void Run()
     {
         System.Console.WriteLine("==================================");
@@ -247,6 +281,7 @@ public sealed class GameManager
         DemonstrateDecoratorPattern();
         DemonstrateBuilderPattern();
         DemonstrateAdapterPattern();
+        DemonstrateStrategyPattern();
         
         System.Console.WriteLine("Press any key to start the journey...");
         System.Console.ReadKey();

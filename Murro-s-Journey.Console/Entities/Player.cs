@@ -33,9 +33,20 @@ public class Player : Entity
         System.Console.WriteLine($"Level up! Now level {level}");
     }
 
+    public void Move(int deltaX, int deltaY)
+    {
+        int newX = posX + deltaX;
+        int newY = posY + deltaY;
+        
+        if (newX >= 0 && newX < 20 && newY >= 0 && newY < 10)
+        {
+            posX = newX;
+            posY = newY;
+        }
+    }
+
     public override void Update()
     {
-        // TODO: Handle player input (движение)
     }
 
     public override void Draw()
