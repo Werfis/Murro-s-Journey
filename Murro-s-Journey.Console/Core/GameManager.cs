@@ -1,8 +1,9 @@
 using Murro_s_Journey.Console.Entities;
+using Murro_s_Journey.Console.Factories;
 
 namespace Murro_s_Journey.Console.Core;
 
-public class GameManager
+public sealed class GameManager
 {
     private static GameManager? _instance;
     private static readonly object _lock = new object();
@@ -75,6 +76,36 @@ public class GameManager
         System.Console.WriteLine($"Difficulty: {Difficulty}");
         System.Console.WriteLine($"Starting health: {InitialPlayerHealth}");
         System.Console.WriteLine("==================================");
+        System.Console.WriteLine();
+
+        System.Console.WriteLine("=== Enemy Factory Demo ===");
+        
+        EnemyFactory wolfFactory = new WolfFactory();
+        EnemyFactory spiderFactory = new SpiderFactory();
+        
+        Enemy wolf = wolfFactory.CreateEnemy(5, 5);
+        Enemy spider = spiderFactory.CreateEnemy(8, 5);
+        
+        System.Console.WriteLine($"Created: {wolf.Name}");
+        System.Console.WriteLine($"  {wolf.GetDescription()}");
+        System.Console.WriteLine();
+        System.Console.WriteLine($"Created: {spider.Name}");
+        System.Console.WriteLine($"  {spider.GetDescription()}");
+        
+        System.Console.WriteLine();
+        System.Console.WriteLine("=== Attack Demo ===");
+        
+        Player demoPlayer = new Player("Murro", 15, 5, 100);
+        System.Console.WriteLine($"Player health before Wolf attack: {demoPlayer.Health}");
+        wolf.Attack(demoPlayer);
+        System.Console.WriteLine($"Player health after Wolf attack: {demoPlayer.Health}");
+        
+        System.Console.WriteLine();
+        
+        System.Console.WriteLine($"Player health before Spider attack: {demoPlayer.Health}");
+        spider.Attack(demoPlayer);
+        System.Console.WriteLine($"Player health after Spider attack: {demoPlayer.Health}");
+        
         System.Console.WriteLine();
         System.Console.WriteLine("Press any key to start the journey...");
         System.Console.ReadKey();
