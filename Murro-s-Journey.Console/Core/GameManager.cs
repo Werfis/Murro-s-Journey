@@ -1,6 +1,7 @@
 using Murro_s_Journey.Console.Entities;
 using Murro_s_Journey.Console.Factories;
 using Murro_s_Journey.Console.Builders;
+using Murro_s_Journey.Console.Decorators;
 
 namespace Murro_s_Journey.Console.Core;
 
@@ -69,16 +70,53 @@ public sealed class GameManager
         }
     }
 
-    public void Run()
+    private void DemonstrateDecoratorPattern()
     {
-        System.Console.WriteLine("==================================");
-        System.Console.WriteLine("Welcome to the forest, Murro");
-        System.Console.WriteLine($"Map size: {MapWidth}x{MapHeight}");
-        System.Console.WriteLine($"Difficulty: {Difficulty}");
-        System.Console.WriteLine($"Starting health: {InitialPlayerHealth}");
-        System.Console.WriteLine("==================================");
+        System.Console.WriteLine("=== Damage Modifier System (Decorator Pattern) ===");
         System.Console.WriteLine();
+        
+        int baseDamage = 15;
+        int enemyDamage = 25;
+        
+        System.Console.WriteLine($"Murro's base damage: {baseDamage}");
+        System.Console.WriteLine($"Enemy deals to Murro: {enemyDamage} damage");
+        System.Console.WriteLine();
+        
+        System.Console.WriteLine("--- Rage (attack increase) ---");
+        
+        IAttackModifier baseAttack = new BaseAttackModifier();
+        System.Console.WriteLine($"No effects: {baseAttack.GetDescription()}");
+        System.Console.WriteLine($"  Murro's damage: {baseAttack.GetModifiedDamage(baseDamage)}");
+        
+        IAttackModifier rageAttack = new RageDecorator(baseAttack, 1.5f);
+        System.Console.WriteLine($"With Rage: {rageAttack.GetDescription()}");
+        System.Console.WriteLine($"  Murro's damage: {rageAttack.GetModifiedDamage(baseDamage)}");
+        System.Console.WriteLine($"  Calculation: 15 x 1.5 = 22");
+        System.Console.WriteLine();
+        
+        System.Console.WriteLine("--- Nature Guardian (damage protection) ---");
+        
+        IDefenseModifier baseDefense = new BaseDefenseModifier();
+        System.Console.WriteLine($"No defense: {baseDefense.GetDescription()}");
+        System.Console.WriteLine($"  Murro takes: {baseDefense.GetModifiedDamage(enemyDamage)} damage");
+        
+        IDefenseModifier natureDefense = new NatureGuardianDecorator(baseDefense, 30);
+        System.Console.WriteLine($"With Nature Guardian: {natureDefense.GetDescription()}");
+        
+        // Block demonstration
+        System.Console.WriteLine();
+        System.Console.WriteLine("Defense demonstration (5 enemy attacks):");
+        for (int i = 0; i < 5; i++)
+        {
+            int finalDamage = natureDefense.GetModifiedDamage(enemyDamage);
+            System.Console.WriteLine($"  Attack {i + 1}: Murro takes {finalDamage} damage");
+        }
+        
+        System.Console.WriteLine();
+    }
 
+    private void DemonstrateBuilderPattern()
+    {
         System.Console.WriteLine("=== Enemy Builder Demo ===");
         
         Enemy boss = new EnemyBuilder()
@@ -146,6 +184,21 @@ public sealed class GameManager
         System.Console.WriteLine($"Player health after spider attack: {demoPlayer.Health}");
         
         System.Console.WriteLine();
+    }
+
+    public void Run()
+    {
+        System.Console.WriteLine("==================================");
+        System.Console.WriteLine("Welcome to the forest, Murro");
+        System.Console.WriteLine($"Map size: {MapWidth}x{MapHeight}");
+        System.Console.WriteLine($"Difficulty: {Difficulty}");
+        System.Console.WriteLine($"Starting health: {InitialPlayerHealth}");
+        System.Console.WriteLine("==================================");
+        System.Console.WriteLine();
+
+        DemonstrateDecoratorPattern();
+        DemonstrateBuilderPattern();
+        
         System.Console.WriteLine("Press any key to start the journey...");
         System.Console.ReadKey();
 

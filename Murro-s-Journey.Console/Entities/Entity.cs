@@ -23,16 +23,27 @@ public abstract class Entity
         this.posY = startY;
     }
 
-    public virtual void TakeDamage(int damage)
+    public virtual int TakeDamage(int damage)
     {
+        if (damage < 0) return 0;
+        
+        int actualDamage = Math.Min(damage, health);
         health -= damage;
         if (health < 0) health = 0;
+        
+        return actualDamage;
     }
 
-    public virtual void Heal(int amount)
+    public virtual int Heal(int amount)
     {
+        if (amount < 0) return 0;
+        if (!IsAlive()) return 0;
+        
+        int oldHealth = health;
         health += amount;
         if (health > maxHealth) health = maxHealth;
+        
+        return health - oldHealth;
     }
 
     public bool IsAlive() => health > 0;
