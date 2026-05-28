@@ -1,3 +1,5 @@
+using Murro_s_Journey.Console.Events;
+
 namespace Murro_s_Journey.Console.Entities;
 
 public class Player : Entity
@@ -7,6 +9,8 @@ public class Player : Entity
 
     public int Experience => experience;
     public int Level => level;
+
+    public event EventHandler<HealthChangedEventArgs>? HealthChanged;
 
     public Player(string name, int startX, int startY, int startHealth) 
         : base(name, startHealth, startX, startY)
@@ -29,7 +33,7 @@ public class Player : Entity
         level++;
         experience = 0;
         maxHealth += 20;
-        health = maxHealth;
+        Heal(20);
         System.Console.WriteLine($"Level up! Now level {level}");
     }
 
@@ -43,6 +47,37 @@ public class Player : Entity
             posX = newX;
             posY = newY;
         }
+    }
+
+    public override int TakeDamage(int damage)
+    {
+        int oldHealth = health;
+        int actualDamage = base.TakeDamage(damage);
+        
+        if (oldHealth != health)
+        {
+            OnHealthChanged(new HealthChangedEventArgs(health, maxHealth));
+        }
+        
+        return actualDamage;
+    }
+
+    public override int Heal(int amount)
+    {
+        int oldHealth = health;
+        int actualHeal = base.Heal(amount);
+        
+        if (oldHealth != health)
+        {
+            OnHealthChanged(new HealthChangedEventArgs(health, maxHealth));
+        }
+        
+        return actualHeal;
+    }
+
+    protected virtual void OnHealthChanged(HealthChangedEventArgs e)
+    {
+        HealthChanged?.Invoke(this, e);
     }
 
     public override void Update()
