@@ -1,5 +1,6 @@
 using Murro_s_Journey.Console.Entities;
 using Murro_s_Journey.Console.Factories;
+using Murro_s_Journey.Console.Builders;
 
 namespace Murro_s_Journey.Console.Core;
 
@@ -78,33 +79,71 @@ public sealed class GameManager
         System.Console.WriteLine("==================================");
         System.Console.WriteLine();
 
-        System.Console.WriteLine("=== Enemy Factory Demo ===");
+        System.Console.WriteLine("=== Enemy Builder Demo ===");
         
-        EnemyFactory wolfFactory = new WolfFactory();
-        EnemyFactory spiderFactory = new SpiderFactory();
+        Enemy boss = new EnemyBuilder()
+            .SetName("Smiley Face")
+            .SetHealth(200)
+            .SetDamage(30)
+            .SetRewardExp(300)
+            .SetPosition(10, 5)
+            .SetType("custom")
+            .Build();
         
-        Enemy wolf = wolfFactory.CreateEnemy(5, 5);
-        Enemy spider = spiderFactory.CreateEnemy(8, 5);
+        System.Console.WriteLine($"Created: {boss.Name}");
+        System.Console.WriteLine($"  {boss.GetDescription()}");
         
+        Enemy wolf = new EnemyBuilder()
+            .SetType("wolf")
+            .SetPosition(5, 5)
+            .Build();
+        
+        System.Console.WriteLine();
         System.Console.WriteLine($"Created: {wolf.Name}");
         System.Console.WriteLine($"  {wolf.GetDescription()}");
+        
+        Enemy spider = new EnemyBuilder()
+            .SetType("spider")
+            .SetPosition(8, 7)
+            .Build();
+        
         System.Console.WriteLine();
         System.Console.WriteLine($"Created: {spider.Name}");
         System.Console.WriteLine($"  {spider.GetDescription()}");
+        
+        Enemy fastEnemy = new EnemyBuilder()
+            .SetName("Sergi")
+            .SetHealth(60)
+            .SetDamage(25)
+            .SetRewardExp(120)
+            .SetPosition(12, 3)
+            .SetType("custom")
+            .Build();
+        
+        System.Console.WriteLine();
+        System.Console.WriteLine($"Created: {fastEnemy.Name}");
+        System.Console.WriteLine($"  {fastEnemy.GetDescription()}");
         
         System.Console.WriteLine();
         System.Console.WriteLine("=== Attack Demo ===");
         
         Player demoPlayer = new Player("Murro", 15, 5, 100);
-        System.Console.WriteLine($"Player health before Wolf attack: {demoPlayer.Health}");
-        wolf.Attack(demoPlayer);
-        System.Console.WriteLine($"Player health after Wolf attack: {demoPlayer.Health}");
+        
+        System.Console.WriteLine($"Player health before boss attack: {demoPlayer.Health}");
+        boss.Attack(demoPlayer);
+        System.Console.WriteLine($"Player health after boss attack: {demoPlayer.Health}");
         
         System.Console.WriteLine();
         
-        System.Console.WriteLine($"Player health before Spider attack: {demoPlayer.Health}");
+        System.Console.WriteLine($"Player health before wolf attack: {demoPlayer.Health}");
+        wolf.Attack(demoPlayer);
+        System.Console.WriteLine($"Player health after wolf attack: {demoPlayer.Health}");
+        
+        System.Console.WriteLine();
+        
+        System.Console.WriteLine($"Player health before spider attack: {demoPlayer.Health}");
         spider.Attack(demoPlayer);
-        System.Console.WriteLine($"Player health after Spider attack: {demoPlayer.Health}");
+        System.Console.WriteLine($"Player health after spider attack: {demoPlayer.Health}");
         
         System.Console.WriteLine();
         System.Console.WriteLine("Press any key to start the journey...");
