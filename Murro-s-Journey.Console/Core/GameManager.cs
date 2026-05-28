@@ -2,6 +2,8 @@ using Murro_s_Journey.Console.Entities;
 using Murro_s_Journey.Console.Factories;
 using Murro_s_Journey.Console.Builders;
 using Murro_s_Journey.Console.Decorators;
+using Murro_s_Journey.Console.Interfaces;
+using Murro_s_Journey.Console.Adapters;
 
 namespace Murro_s_Journey.Console.Core;
 
@@ -103,7 +105,6 @@ public sealed class GameManager
         IDefenseModifier natureDefense = new NatureGuardianDecorator(baseDefense, 30);
         System.Console.WriteLine($"With Nature Guardian: {natureDefense.GetDescription()}");
         
-        // Block demonstration
         System.Console.WriteLine();
         System.Console.WriteLine("Defense demonstration (5 enemy attacks):");
         for (int i = 0; i < 5; i++)
@@ -186,6 +187,53 @@ public sealed class GameManager
         System.Console.WriteLine();
     }
 
+    private void DemonstrateAdapterPattern()
+    {
+        System.Console.WriteLine("=== Adapter Pattern Demo ===");
+        System.Console.WriteLine();
+        
+        int width = 10;
+        int height = 8;
+        
+        System.Console.WriteLine("--- Original Map Generator ---");
+        IMapGenerator originalGenerator = new SimpleMapGenerator();
+        originalGenerator.Generate(width, height);
+        char[,] originalMap = originalGenerator.GetMap();
+        
+        System.Console.WriteLine($"Description: {originalGenerator.GetDescription()}");
+        System.Console.WriteLine("Generated map:");
+        PrintMap(originalMap);
+        System.Console.WriteLine();
+        System.Console.WriteLine("--- Adapted Dungeon Generator ---");
+        DungeonGenerator thirdPartyGenerator = new DungeonGenerator("Dark forest");
+        IMapGenerator adaptedGenerator = new DungeonGeneratorAdapter(thirdPartyGenerator);
+        adaptedGenerator.Generate(width, height);
+        char[,] adaptedMap = adaptedGenerator.GetMap();
+        
+        System.Console.WriteLine($"Description: {adaptedGenerator.GetDescription()}");
+        System.Console.WriteLine("Generated map:");
+        PrintMap(adaptedMap);
+        System.Console.WriteLine();
+        
+        System.Console.WriteLine("Both generators work with the same interface");
+        System.Console.WriteLine();
+    }
+
+    private void PrintMap(char[,] map)
+    {
+        int width = map.GetLength(0);
+        int height = map.GetLength(1);
+        
+        for (int y = 0; y < height; y++)
+        {
+            for (int x = 0; x < width; x++)
+            {
+                System.Console.Write(map[x, y]);
+            }
+            System.Console.WriteLine();
+        }
+    }
+
     public void Run()
     {
         System.Console.WriteLine("==================================");
@@ -198,6 +246,7 @@ public sealed class GameManager
 
         DemonstrateDecoratorPattern();
         DemonstrateBuilderPattern();
+        DemonstrateAdapterPattern();
         
         System.Console.WriteLine("Press any key to start the journey...");
         System.Console.ReadKey();
