@@ -23,7 +23,6 @@ public class Map
 
     public void Generate()
     {
-        // TODO: Procedural generation
     }
 
     public void AddEntity(Entity entity) => entities.Add(entity);
@@ -37,6 +36,11 @@ public class Map
     public Item? GetItemAt(int x, int y)
     {
         return items.FirstOrDefault(i => i.PosX == x && i.PosY == y);
+    }
+
+    public List<Entity> GetAllEntities()
+    {
+        return entities.ToList();
     }
 
     public void Update()
