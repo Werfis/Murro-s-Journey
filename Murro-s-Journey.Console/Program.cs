@@ -1,4 +1,4 @@
-﻿using Murro_s_Journey.Console.Core;
+﻿using Murro_s_Journey.Console.States;
 
 namespace Murro_s_Journey.Console;
 
@@ -6,6 +6,12 @@ class Program
 {
     static void Main(string[] args)
     {
-        GameManager.Instance.Run();
+        GameContext game = new GameContext();
+        
+        while (true)
+        {
+            game.Update();
+            System.Threading.Thread.Sleep(100);
+        }
     }
 }

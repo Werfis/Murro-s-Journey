@@ -12,6 +12,7 @@ public class Game
     private ConsoleHUD hud;
 
     public bool IsRunning => isRunning;
+    public bool IsGameOver => !player.IsAlive();
 
     public Game(int mapWidth, int mapHeight, int playerHealth)
     {
