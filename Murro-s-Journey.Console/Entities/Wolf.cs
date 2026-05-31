@@ -5,7 +5,7 @@ public class Wolf : Enemy
     private Random random = new Random();
 
     public Wolf(int startX, int startY) 
-        : base("Wolf", 40, 15, 50, startX, startY)
+        : base("Wolf", 40, 8, 30, startX, startY)
     {
     }
 
@@ -16,10 +16,8 @@ public class Wolf : Enemy
         if (random.Next(100) < 20)
         {
             finalDamage = damage * 2;
-            System.Console.WriteLine($"The wolf makes a big bite! {finalDamage}!");
+            System.Console.WriteLine($"The wolf makes a big bite! {finalDamage} damage!");
         }
-        
-        target.TakeDamage(finalDamage);
     }
 
     public override string GetDescription()
