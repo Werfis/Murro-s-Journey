@@ -5,6 +5,7 @@ using Murro_s_Journey.Console.Decorators;
 using Murro_s_Journey.Console.Interfaces;
 using Murro_s_Journey.Console.Adapters;
 using Murro_s_Journey.Console.Strategies;
+using Murro_s_Journey.Console.Commands;
 
 namespace Murro_s_Journey.Console.Core;
 
@@ -18,6 +19,7 @@ public sealed class GameManager
         MapWidth = 20;
         MapHeight = 10;
         Difficulty = DifficultyLevel.Normal;
+        _commandHistory = new Stack<ICommand>();
     }
 
     public static GameManager Instance
@@ -71,6 +73,39 @@ public sealed class GameManager
                 default: return 1;
             }
         }
+    }
+
+    private Stack<ICommand> _commandHistory;
+
+    public void ExecuteCommand(ICommand command)
+    {
+        command.Execute();
+        _commandHistory.Push(command);
+    }
+
+    public void UndoLastCommand()
+    {
+        if (_commandHistory.Count > 0)
+        {
+            ICommand lastCommand = _commandHistory.Pop();
+            lastCommand.Undo();
+            System.Console.WriteLine($"Undo: {lastCommand.GetDescription()}");
+        }
+        else
+        {
+            System.Console.WriteLine("Nothing to undo!");
+        }
+    }
+
+    public void ClearHistory()
+    {
+        _commandHistory.Clear();
+        System.Console.WriteLine("Command history cleared.");
+    }
+
+    public int GetHistoryCount()
+    {
+        return _commandHistory.Count;
     }
 
     private void DemonstrateDecoratorPattern()
@@ -268,6 +303,54 @@ public sealed class GameManager
         System.Console.WriteLine();
     }
 
+    private void DemonstrateCommandPattern()
+    {
+        System.Console.WriteLine("=== Command Pattern Demo (Undo System) ===");
+        System.Console.WriteLine();
+        
+        var testPlayer = new Player("Test", 10, 5, 100);
+        var commands = new List<ICommand>
+        {
+            new MoveCommand(testPlayer, 1, 0),
+            new MoveCommand(testPlayer, 0, -1),
+            new HealCommand(testPlayer, 20),
+            new MoveCommand(testPlayer, -1, 0),
+            new DamageCommand(testPlayer, 15),
+            new HealCommand(testPlayer, 10)
+        };
+        
+        System.Console.WriteLine("--- Executing Commands ---");
+        foreach (var cmd in commands)
+        {
+            cmd.Execute();
+        }
+        
+        System.Console.WriteLine();
+        System.Console.WriteLine($"Final player position: ({testPlayer.PosX}, {testPlayer.PosY})");
+        System.Console.WriteLine($"Final player health: {testPlayer.Health}");
+        
+        System.Console.WriteLine();
+        System.Console.WriteLine("--- Undo Operations ---");
+        
+        for (int i = 0; i < commands.Count + 1; i++)
+        {
+            if (_commandHistory.Count > 0)
+            {
+                var lastCmd = _commandHistory.Pop();
+                lastCmd.Undo();
+            }
+            else
+            {
+                System.Console.WriteLine("History is empty!");
+            }
+        }
+        
+        System.Console.WriteLine();
+        System.Console.WriteLine($"Final player position after undo: ({testPlayer.PosX}, {testPlayer.PosY})");
+        System.Console.WriteLine($"Final player health after undo: {testPlayer.Health}");
+        System.Console.WriteLine();
+    }
+
     public void Run()
     {
         System.Console.WriteLine("==================================");
@@ -282,6 +365,7 @@ public sealed class GameManager
         DemonstrateBuilderPattern();
         DemonstrateAdapterPattern();
         DemonstrateStrategyPattern();
+        DemonstrateCommandPattern();
         
         System.Console.WriteLine("Press any key to start the journey...");
         System.Console.ReadKey();
