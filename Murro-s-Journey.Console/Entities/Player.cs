@@ -49,6 +49,15 @@ public class Player : Entity
         }
     }
 
+    public void SetPosition(int x, int y)
+    {
+        if (x >= 0 && x < 20 && y >= 0 && y < 10)
+        {
+            posX = x;
+            posY = y;
+        }
+    }
+
     public override int TakeDamage(int damage)
     {
         int oldHealth = health;
