@@ -37,10 +37,20 @@ public class Game
 
     public void Start()
     {
-        System.Console.WriteLine("Murro's Journey - Press ESC to exit");
-        System.Console.WriteLine("Controls: WASD to move");
-        System.Console.WriteLine("Press H to heal, Press X to take damage (demo events)");
-        System.Console.WriteLine("Press Z to undo last action");
+        System.Console.Clear();
+        System.Console.WriteLine("========================================");
+        System.Console.WriteLine("||                                    ||");
+        System.Console.WriteLine("||         Murro's Journey            ||");
+        System.Console.WriteLine("||                                    ||");
+        System.Console.WriteLine("||      Press ESC to exit             ||");
+        System.Console.WriteLine("||      WASD to move                  ||");
+        System.Console.WriteLine("||      H to heal                     ||");
+        System.Console.WriteLine("||      Z to undo last action         ||");
+        System.Console.WriteLine("||                                    ||");
+        System.Console.WriteLine("========================================");
+        System.Console.WriteLine();
+        System.Console.WriteLine("  Press any key to begin...");
+        System.Console.ReadKey();
     }
 
     public void Update()
@@ -97,7 +107,16 @@ public class Game
         
         if (IsGameOver)
         {
-            System.Console.WriteLine("Game Over! Press any key to exit...");
+            System.Console.Clear();
+            System.Console.WriteLine("========================================");
+            System.Console.WriteLine("||                                    ||");
+            System.Console.WriteLine("||           GAME OVER                ||");
+            System.Console.WriteLine("||                                    ||");
+            System.Console.WriteLine("||      You have fallen in forest     ||");
+            System.Console.WriteLine("||                                    ||");
+            System.Console.WriteLine("========================================");
+            System.Console.WriteLine();
+            System.Console.WriteLine("  Press any key to exit...");
             System.Console.ReadKey();
             Stop();
         }
@@ -115,13 +134,12 @@ public class Game
         currentMap.Draw();
         
         System.Console.WriteLine();
-        System.Console.WriteLine("WASD to move | H = Heal | X = Take Damage | Z = Undo | ESC to exit");
+        System.Console.WriteLine("WASD to move | H = Heal | Z = Undo | ESC to exit");
     }
 
     public void Stop()
     {
         isRunning = false;
         hud.Dispose();
-        System.Console.WriteLine("Thanks for playing!");
     }
 }
