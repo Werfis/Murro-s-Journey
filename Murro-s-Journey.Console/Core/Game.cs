@@ -1,6 +1,7 @@
 using Murro_s_Journey.Console.Entities;
 using Murro_s_Journey.Console.Strategies;
 using Murro_s_Journey.Console.UI;
+using Murro_s_Journey.Console.Commands;
 
 namespace Murro_s_Journey.Console.Core;
 
@@ -39,6 +40,7 @@ public class Game
         System.Console.WriteLine("Murro's Journey - Press ESC to exit");
         System.Console.WriteLine("Controls: WASD to move");
         System.Console.WriteLine("Press H to heal, Press X to take damage (demo events)");
+        System.Console.WriteLine("Press Z to undo last action");
     }
 
     public void Update()
@@ -46,39 +48,40 @@ public class Game
         if (System.Console.KeyAvailable)
         {
             var key = System.Console.ReadKey(true).Key;
+            
+            if (key == ConsoleKey.Z)
+            {
+                GameManager.Instance.UndoLastCommand();
+                return;
+            }
+            
             if (key == ConsoleKey.Escape)
             {
                 Stop();
             }
             else if (key == ConsoleKey.W)
             {
-                player.Move(0, -1);
-                System.Console.WriteLine("Moving up");
+                GameManager.Instance.ExecuteCommand(new MoveCommand(player, 0, -1));
             }
             else if (key == ConsoleKey.S)
             {
-                player.Move(0, 1);
-                System.Console.WriteLine("Moving down");
+                GameManager.Instance.ExecuteCommand(new MoveCommand(player, 0, 1));
             }
             else if (key == ConsoleKey.A)
             {
-                player.Move(-1, 0);
-                System.Console.WriteLine("Moving left");
+                GameManager.Instance.ExecuteCommand(new MoveCommand(player, -1, 0));
             }
             else if (key == ConsoleKey.D)
             {
-                player.Move(1, 0);
-                System.Console.WriteLine("Moving right");
+                GameManager.Instance.ExecuteCommand(new MoveCommand(player, 1, 0));
             }
             else if (key == ConsoleKey.H)
             {
-                player.Heal(20);
-                System.Console.WriteLine("You healed 20 HP!");
+                GameManager.Instance.ExecuteCommand(new HealCommand(player, 20));
             }
             else if (key == ConsoleKey.X)
             {
-                player.TakeDamage(15);
-                System.Console.WriteLine("You took 15 damage!");
+                GameManager.Instance.ExecuteCommand(new DamageCommand(player, 15));
             }
         }
         
@@ -91,6 +94,13 @@ public class Game
         }
         
         currentMap.Update();
+        
+        if (IsGameOver)
+        {
+            System.Console.WriteLine("Game Over! Press any key to exit...");
+            System.Console.ReadKey();
+            Stop();
+        }
     }
 
     public void Draw()
@@ -99,11 +109,13 @@ public class Game
         
         System.Console.WriteLine(hud.GetHealthBar());
         System.Console.WriteLine($"Level: {player.Level} | Exp: {player.Experience}");
+        System.Console.WriteLine($"Undo history: {GameManager.Instance.GetHistoryCount()} commands");
         System.Console.WriteLine();
         
         currentMap.Draw();
+        
         System.Console.WriteLine();
-        System.Console.WriteLine("WASD to move | H = Heal | X = Take Damage | ESC to exit");
+        System.Console.WriteLine("WASD to move | H = Heal | X = Take Damage | Z = Undo | ESC to exit");
     }
 
     public void Stop()
