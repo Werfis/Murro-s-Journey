@@ -8,6 +8,7 @@ namespace Murro_s_Journey.Console.Core;
 public class Game
 {
     private bool isRunning;
+    private bool isGameOverShown;
     private Map currentMap;
     private Player player;
     private ConsoleHUD hud;
@@ -18,6 +19,7 @@ public class Game
     public Game(int mapWidth, int mapHeight, int playerHealth)
     {
         isRunning = true;
+        isGameOverShown = false;
         currentMap = new Map(mapWidth, mapHeight);
         
         player = new Player("Murro", mapWidth / 2, mapHeight / 2, playerHealth);
@@ -43,9 +45,9 @@ public class Game
         System.Console.WriteLine("||         Murro's Journey            ||");
         System.Console.WriteLine("||                                    ||");
         System.Console.WriteLine("||      Press ESC to exit             ||");
-        System.Console.WriteLine("||      WASD to move                  ||");
-        System.Console.WriteLine("||      H to heal                     ||");
-        System.Console.WriteLine("||      Z to undo last action         ||");
+        System.Console.WriteLine("||      WASD to move                 ||");
+        System.Console.WriteLine("||      H to heal                    ||");
+        System.Console.WriteLine("||      Z to undo last action        ||");
         System.Console.WriteLine("||                                    ||");
         System.Console.WriteLine("========================================");
         System.Console.WriteLine();
@@ -55,6 +57,15 @@ public class Game
 
     public void Update()
     {
+        if (IsGameOver && !isGameOverShown)
+        {
+            isGameOverShown = true;
+            ShowGameOver();
+            return;
+        }
+        
+        if (!isRunning) return;
+
         if (System.Console.KeyAvailable)
         {
             var key = System.Console.ReadKey(true).Key;
@@ -104,26 +115,28 @@ public class Game
         }
         
         currentMap.Update();
-        
-        if (IsGameOver)
-        {
-            System.Console.Clear();
-            System.Console.WriteLine("========================================");
-            System.Console.WriteLine("||                                    ||");
-            System.Console.WriteLine("||           GAME OVER                ||");
-            System.Console.WriteLine("||                                    ||");
-            System.Console.WriteLine("||      You have fallen in forest     ||");
-            System.Console.WriteLine("||                                    ||");
-            System.Console.WriteLine("========================================");
-            System.Console.WriteLine();
-            System.Console.WriteLine("  Press any key to exit...");
-            System.Console.ReadKey();
-            Stop();
-        }
+    }
+
+    private void ShowGameOver()
+    {
+        System.Console.Clear();
+        System.Console.WriteLine("========================================");
+        System.Console.WriteLine("||                                    ||");
+        System.Console.WriteLine("||           GAME OVER                ||");
+        System.Console.WriteLine("||                                    ||");
+        System.Console.WriteLine("||      You have fallen in forest    ||");
+        System.Console.WriteLine("||                                    ||");
+        System.Console.WriteLine("========================================");
+        System.Console.WriteLine();
+        System.Console.WriteLine("  Press any key to exit...");
+        System.Console.ReadKey();
+        Stop();
     }
 
     public void Draw()
     {
+        if (!isRunning) return;
+        
         System.Console.Clear();
         
         System.Console.WriteLine(hud.GetHealthBar());
