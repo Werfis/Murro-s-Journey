@@ -45,9 +45,9 @@ public class Game
         System.Console.WriteLine("||         Murro's Journey            ||");
         System.Console.WriteLine("||                                    ||");
         System.Console.WriteLine("||      Press ESC to exit             ||");
-        System.Console.WriteLine("||      WASD to move                 ||");
-        System.Console.WriteLine("||      H to heal                    ||");
-        System.Console.WriteLine("||      Z to undo last action        ||");
+        System.Console.WriteLine("||      WASD to move                  ||");
+        System.Console.WriteLine("||      H to heal                     ||");
+        System.Console.WriteLine("||      Z to undo last action         ||");
         System.Console.WriteLine("||                                    ||");
         System.Console.WriteLine("========================================");
         System.Console.WriteLine();
@@ -124,7 +124,7 @@ public class Game
         System.Console.WriteLine("||                                    ||");
         System.Console.WriteLine("||           GAME OVER                ||");
         System.Console.WriteLine("||                                    ||");
-        System.Console.WriteLine("||      You have fallen in forest    ||");
+        System.Console.WriteLine("||      You have fallen in forest     ||");
         System.Console.WriteLine("||                                    ||");
         System.Console.WriteLine("========================================");
         System.Console.WriteLine();
